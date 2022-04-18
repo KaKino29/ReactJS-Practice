@@ -1,10 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  AnimatePresence,
-  motion,
-  useViewportScroll,
-  Variants,
-} from "framer-motion";
+import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useHistory, useRouteMatch } from "react-router-dom";
@@ -19,6 +14,7 @@ import { makeImagePath } from "../utils";
 import {
   faChevronLeft,
   faChevronRight,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Wrapper = styled.div`
@@ -34,7 +30,7 @@ const Loader = styled.div`
 `;
 
 const Banner = styled.div<{ bgPhoto: string }>`
-  height: 80vh;
+  height: 75vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -52,6 +48,11 @@ const Title = styled.h2`
 const Overview = styled.p`
   font-size: 15px;
   width: 50%;
+  display: flex;
+  flex-direction: column;
+  span {
+    font-size: 20px;
+  }
 `;
 
 const Slider = styled.div`
@@ -102,6 +103,7 @@ const Info = styled(motion.div)`
   h4 {
     text-align: center;
     font-size: 15px;
+    font-weight: 600;
   }
 `;
 
@@ -116,8 +118,8 @@ const Overlay = styled(motion.div)`
 
 const BigMovie = styled(motion.div)`
   position: absolute;
-  width: 40vw;
-  height: 80vh;
+  width: 30vw;
+  height: 60vh;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -147,6 +149,16 @@ const BigOverview = styled.p`
   position: relative;
   top: -80px;
   font-size: 15px;
+`;
+
+const BigDetail = styled.div`
+  color: ${(props) => props.theme.white.lighter};
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  top: -100px;
+  font-size: 20px;
 `;
 
 const rowVars = {
@@ -312,10 +324,29 @@ function Home() {
         <>
           <Banner bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}>
             <Title>{data?.results[0].title}</Title>
-            <Overview>{data?.results[0].overview}</Overview>
+            <Overview>
+              <span style={{ fontSize: "15px", paddingBottom: "15px" }}>
+                {data?.results[0].overview}
+              </span>
+              <span>Release date: {data?.results[0].release_date}</span>
+              <span>
+                Score:
+                <FontAwesomeIcon
+                  icon={faStar}
+                  style={{
+                    color: "gold",
+                    fontSize: "20px",
+                    paddingLeft: "3px",
+                    paddingRight: "5px",
+                  }}
+                />
+                {data?.results[0].vote_average}
+              </span>
+              <span>Vote count: {data?.results[0].vote_count}</span>
+            </Overview>
           </Banner>
           <Slider>
-            <SliderTitle>Popular Movies</SliderTitle>
+            <SliderTitle>Now Playing</SliderTitle>
             <FontAwesomeIcon
               icon={faChevronLeft}
               onClick={decreaseIndex}
@@ -516,7 +547,7 @@ function Home() {
                 />
                 <BigMovie
                   layoutId={bigMovieMatch.params.movieId}
-                  style={{ top: scrollY.get() + 100 }}
+                  style={{ top: scrollY.get() + 250 }}
                 >
                   {clickedMovie && (
                     <>
@@ -530,6 +561,23 @@ function Home() {
                       />
                       <BigTitle>{clickedMovie.title}</BigTitle>
                       <BigOverview>{clickedMovie.overview}</BigOverview>
+                      <BigDetail>
+                        <span>Release date: {clickedMovie.release_date}</span>
+                        <span>
+                          Score:
+                          <FontAwesomeIcon
+                            icon={faStar}
+                            style={{
+                              color: "gold",
+                              fontSize: "20px",
+                              paddingLeft: "3px",
+                              paddingRight: "5px",
+                            }}
+                          />
+                          {clickedMovie.vote_average}
+                        </span>
+                        <span>Vote count: {clickedMovie.vote_count}</span>
+                      </BigDetail>
                     </>
                   )}
                 </BigMovie>
@@ -544,7 +592,7 @@ function Home() {
                 />
                 <BigMovie
                   layoutId={bigRatedMatch.params.movieId}
-                  style={{ top: scrollY.get() + 100 }}
+                  style={{ top: scrollY.get() + 250 }}
                 >
                   {clickedRated && (
                     <>
@@ -558,6 +606,23 @@ function Home() {
                       />
                       <BigTitle>{clickedRated.title}</BigTitle>
                       <BigOverview>{clickedRated.overview}</BigOverview>
+                      <BigDetail>
+                        <span>Release date: {clickedRated.release_date}</span>
+                        <span>
+                          Rating:
+                          <FontAwesomeIcon
+                            icon={faStar}
+                            style={{
+                              color: "gold",
+                              fontSize: "20px",
+                              paddingLeft: "3px",
+                              paddingRight: "5px",
+                            }}
+                          />
+                          {clickedRated.vote_average}
+                        </span>
+                        <span>Vote count: {clickedRated.vote_count}</span>
+                      </BigDetail>
                     </>
                   )}
                 </BigMovie>
@@ -572,7 +637,7 @@ function Home() {
                 />
                 <BigMovie
                   layoutId={bigUpcomingMatch.params.movieId}
-                  style={{ top: scrollY.get() + 100 }}
+                  style={{ top: scrollY.get() + 250 }}
                 >
                   {clickedUpcoming && (
                     <>
@@ -586,6 +651,25 @@ function Home() {
                       />
                       <BigTitle>{clickedUpcoming.title}</BigTitle>
                       <BigOverview>{clickedUpcoming.overview}</BigOverview>
+                      <BigDetail>
+                        <span>
+                          Release date: {clickedUpcoming.release_date}
+                        </span>
+                        <span>
+                          Rating:
+                          <FontAwesomeIcon
+                            icon={faStar}
+                            style={{
+                              color: "gold",
+                              fontSize: "20px",
+                              paddingLeft: "3px",
+                              paddingRight: "5px",
+                            }}
+                          />
+                          {clickedUpcoming.vote_average}
+                        </span>
+                        <span>Vote count: {clickedUpcoming.vote_count}</span>
+                      </BigDetail>
                     </>
                   )}
                 </BigMovie>

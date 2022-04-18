@@ -1,6 +1,7 @@
 import {
   faChevronLeft,
   faChevronRight,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
@@ -24,7 +25,7 @@ const Loader = styled.div`
 `;
 
 const Banner = styled.div<{ bgPhoto: string }>`
-  height: 80vh;
+  height: 75vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -42,6 +43,11 @@ const Title = styled.h2`
 const Overview = styled.p`
   font-size: 15px;
   width: 50%;
+  display: flex;
+  flex-direction: column;
+  span {
+    font-size: 20px;
+  }
 `;
 
 const Slider = styled.div`
@@ -106,8 +112,8 @@ const Overlay = styled(motion.div)`
 
 const BigTv = styled(motion.div)`
   position: absolute;
-  width: 40vw;
-  height: 80vh;
+  width: 30vw;
+  height: 60vh;
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -137,6 +143,16 @@ const BigOverview = styled.p`
   position: relative;
   top: -80px;
   font-size: 15px;
+`;
+
+const BigDetail = styled.div`
+  color: ${(props) => props.theme.white.lighter};
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  top: -100px;
+  font-size: 20px;
 `;
 
 const rowVars = {
@@ -294,7 +310,26 @@ function Tv() {
         <>
           <Banner bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}>
             <Title>{data?.results[0].name}</Title>
-            <Overview>{data?.results[0].overview}</Overview>
+            <Overview>
+              <span style={{ fontSize: "15px", paddingBottom: "15px" }}>
+                {data?.results[0].overview}
+              </span>
+              <span>Release date: {data?.results[0].first_air_date}</span>
+              <span>
+                Score:
+                <FontAwesomeIcon
+                  icon={faStar}
+                  style={{
+                    color: "gold",
+                    fontSize: "20px",
+                    paddingLeft: "3px",
+                    paddingRight: "5px",
+                  }}
+                />
+                {data?.results[0].vote_average}
+              </span>
+              <span>Vote count: {data?.results[0].vote_count}</span>
+            </Overview>
           </Banner>
           <Slider>
             <SliderTitle>Airing Today</SliderTitle>
@@ -321,7 +356,7 @@ function Tv() {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                transition={{ type: "tween", duration: 1 }}
+                transition={{ duration: 0.5 }}
                 key={index}
                 custom={back}
               >
@@ -449,7 +484,7 @@ function Tv() {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                transition={{ type: "tween", duration: 1 }}
+                transition={{ duration: 0.5 }}
                 key={trIndex}
                 custom={back}
               >
@@ -498,7 +533,7 @@ function Tv() {
                 />
                 <BigTv
                   layoutId={BigTvMatch.params.tvId}
-                  style={{ top: scrollY.get() + 100 }}
+                  style={{ top: scrollY.get() + 250 }}
                 >
                   {clickedTv && (
                     <>
@@ -512,6 +547,23 @@ function Tv() {
                       />
                       <BigTitle>{clickedTv.name}</BigTitle>
                       <BigOverview>{clickedTv.overview}</BigOverview>
+                      <BigDetail>
+                        <span>First air date: {clickedTv.first_air_date}</span>
+                        <span>
+                          Score:
+                          <FontAwesomeIcon
+                            icon={faStar}
+                            style={{
+                              color: "gold",
+                              fontSize: "20px",
+                              paddingLeft: "3px",
+                              paddingRight: "5px",
+                            }}
+                          />
+                          {clickedTv.vote_average}
+                        </span>
+                        <span>Vote count: {clickedTv.vote_count}</span>
+                      </BigDetail>
                     </>
                   )}
                 </BigTv>
@@ -526,7 +578,7 @@ function Tv() {
                 />
                 <BigTv
                   layoutId={bigPopularMatch.params.tvId}
-                  style={{ top: scrollY.get() + 100 }}
+                  style={{ top: scrollY.get() + 250 }}
                 >
                   {clickedPopularTv && (
                     <>
@@ -540,6 +592,25 @@ function Tv() {
                       />
                       <BigTitle>{clickedPopularTv.name}</BigTitle>
                       <BigOverview>{clickedPopularTv.overview}</BigOverview>
+                      <BigDetail>
+                        <span>
+                          First air date: {clickedPopularTv.first_air_date}
+                        </span>
+                        <span>
+                          Score:
+                          <FontAwesomeIcon
+                            icon={faStar}
+                            style={{
+                              color: "gold",
+                              fontSize: "20px",
+                              paddingLeft: "3px",
+                              paddingRight: "5px",
+                            }}
+                          />
+                          {clickedPopularTv.vote_average}
+                        </span>
+                        <span>Vote count: {clickedPopularTv.vote_count}</span>
+                      </BigDetail>
                     </>
                   )}
                 </BigTv>
@@ -554,7 +625,7 @@ function Tv() {
                 />
                 <BigTv
                   layoutId={bigRatedMatch.params.tvId}
-                  style={{ top: scrollY.get() + 100 }}
+                  style={{ top: scrollY.get() + 250 }}
                 >
                   {clickedTopRatedTv && (
                     <>
@@ -568,6 +639,25 @@ function Tv() {
                       />
                       <BigTitle>{clickedTopRatedTv.name}</BigTitle>
                       <BigOverview>{clickedTopRatedTv.overview}</BigOverview>
+                      <BigDetail>
+                        <span>
+                          First air date: {clickedTopRatedTv.first_air_date}
+                        </span>
+                        <span>
+                          Score:
+                          <FontAwesomeIcon
+                            icon={faStar}
+                            style={{
+                              color: "gold",
+                              fontSize: "20px",
+                              paddingLeft: "3px",
+                              paddingRight: "5px",
+                            }}
+                          />
+                          {clickedTopRatedTv.vote_average}
+                        </span>
+                        <span>Vote count: {clickedTopRatedTv.vote_count}</span>
+                      </BigDetail>
                     </>
                   )}
                 </BigTv>
